@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from routes.films import router as films_router
+from routes.pages import router as pages_router
 from routes.meta import router as meta_router
 
 app = FastAPI(title="Movie Finder API", version="0.1.0")
@@ -18,6 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(pages_router)
 app.include_router(films_router)
 app.include_router(meta_router)
 
