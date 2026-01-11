@@ -20,7 +20,10 @@ router = APIRouter(prefix='/films', tags=['films'])
 # -----------------------------
 def add_posters(films: list[dict]) -> list[dict]:
     for film in films:
-        film["poster_url"] = get_poster_by_title(film["title"]) or '/static/no-poster.png'
+        try:
+            film["poster_url"] = get_poster_by_title(film.get("title", "")) or "/static/no-poster.png"
+        except Exception:
+            film["poster_url"] = "/static/no-poster.png"
     return films
 
 # -----------------------------
