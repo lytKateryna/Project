@@ -48,21 +48,3 @@ def recent_queries(limit: int = Query(5, ge=1, le=20)):
         "count": len(items)
     }
 
-
-router = APIRouter()
-
-
-@router.get("/")
-def index_page(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
-    )
-
-@router.get('/health')
-def health():
-    return{"status":"ok"}
-
-# @router.get("/favicon.ico")
-# async def favicon():
-#     return Response(status_code=204)
