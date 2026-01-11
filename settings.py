@@ -1,0 +1,24 @@
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    MYSQL_HOST: str
+    MYSQL_USER: str
+    MYSQL_PASSWORD: str
+    MYSQL_DB: str
+
+    MONGO_URL: str
+    MONGO_DB: str
+    MONGO_LOG_COLLECTION: str
+    MONGO_LOG_STATS: str = "stats"
+
+    tmdb_api_key: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+
+
+settings = Settings()

@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/static/style.css">
+{% extends 'base.html' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+<body>
+<div class="layout">
+
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+        <!-- Search -->
+        <h4>Search</h4>
+        <div class="search-box">
+            <input id="searchInput" placeholder="Keyword or year...">
+            <button onclick="search()">Search</button>
+        </div>
+
+        <!-- Year Range -->
+        <h4>Year Range</h4>
+        <div class="year-range-box">
+            <input id="yearFrom" type="number" placeholder="From year" min="1900" max="2100">
+            <input id="yearTo" type="number" placeholder="To year" min="1900" max="2100">
+            <button onclick="searchByYearRange()">Search by Year Range</button>
+        </div>
+
+        <!-- Genres -->
+        <h4>Genres</h4>
+        <div id="genres" class="genres"></div>
+
+    </aside>
+
+    <!-- ПРАВАЯ ЧАСТЬ -->
+    <main class="content">
+        <div id="results" class="results"></div>
+    </main>
+
+</div>
+{#<script src="/static/app.js" defer></script>#}
+</body>
+{% endblock %}
