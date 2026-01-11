@@ -71,7 +71,7 @@ function searchByYear(year) {
 
   resultsDiv.innerHTML = '<p>Loading...</p>';
 
-  fetch(`/films/search/year?year=${encodeURIComponent(year)}`)
+  fetch(`/films/search/year?year=${y}`)
     .then((res) => {
       if (!res.ok) throw new Error('Server error: ' + res.status);
       return res.json();
@@ -103,33 +103,29 @@ function searchByYear(year) {
 }
 
 function searchByYearRange() {
-  const yearFrom = document.getElementById('yearFrom')?.value?.trim();
-  const yearTo = document.getElementById('yearTo')?.value?.trim();
-
-  if (!yearFrom || !yearTo) {
-    document.getElementById('results').innerHTML = '<p>Please enter both from and to years</p>';
-    return;
-  }
-
-  const from = parseInt(yearFrom);
-  const to = parseInt(yearTo);
-
-  if (from > to) {
-    document.getElementById('results').innerHTML =
-      '<p>From year cannot be greater than to year</p>';
-    return;
-  }
-
   const resultsDiv = document.getElementById('results');
   if (!resultsDiv) return;
+
+  const yearFromInput = document.getElementById('yearFrom');
+  const yearToInput = document.getElementById('yearTo');
+  const from = yearFromInput?.valueAsNumber;
+  const to = yearToInput?.valueAsNumber;
+
+  if (!Number.isInteger(from) || !Number.isInteger(to)) {
+    resultsDiv.innerHTML = '<p>Please enter both from and to years</p>';
+    return;
+  }
+
+  if (from > to) {
+    resultsDiv.innerHTML = '<p>From year cannot be greater than to year</p>';
+    return;
+  }
 
   resultsDiv.innerHTML = '<p>Loading...</p>';
 
   fetch(
-    `/films/search/year_range?year_from=${encodeURIComponent(from)}&year_to=${encodeURIComponent(
-      to,
-    )}`,
-  )
+    `/films/search/year_range?year_from=${encodeURIComponent(from)}&year_to=${encodeURIComponent(to)}`
+)
     .then((res) => {
       if (!res.ok) throw new Error('Server error: ' + res.status);
       return res.json();
@@ -276,4 +272,16 @@ loadGenres(); // initialize genre buttons
       if (btn) btn.addEventListener('click', search);
     }
   }
+
+  const yearFromInput = document.getElementById('yearFrom');
+  const yearToInput = document.getElementById('yearTo');
+  const yearRangeBtn = document.querySelector('.year-range-box button');
+
+  const onYearRangeEnter = (e) => {
+    if (e.key === 'Enter') searchByYearRange();
+  };
+
+  if (yearFromInput) yearFromInput.addEventListener('keyup', onYearRangeEnter);
+  if (yearToInput) yearToInput.addEventListener('keyup', onYearRangeEnter);
+  if (yearRangeBtn) yearRangeBtn.addEventListener('click', searchByYearRange);
 })();
