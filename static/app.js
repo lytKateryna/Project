@@ -1,45 +1,49 @@
 console.log('JS LOADED');
+let currentPage = 0;
+const limit = 10;
 
+let currentSearchType = null;
+let currentSearchParams = {};
 // Tab switching
 function showTab(tabName) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach((tab) => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-button').forEach((btn) => btn.classList.remove('active'));
 
-    // Show selected tab
-    document.getElementById(tabName + '-tab').classList.add('active');
-    event.target.classList.add('active');
+  // Show selected tab
+  document.getElementById(tabName + '-tab').classList.add('active');
+  event.target.classList.add('active');
 
-    // Load statistics if switching to statistics tab
-    if (tabName === 'statistics') {
-        loadStatistics();
-    }
+  // Load statistics if switching to statistics tab
+  if (tabName === 'statistics') {
+    loadStatistics();
+  }
 }
 
 // Statistics functions
 async function loadStatistics() {
-    const statsType = document.getElementById('statsType').value;
-    const resultsDiv = document.getElementById('statsResults');
+  const statsType = document.getElementById('statsType').value;
+  const resultsDiv = document.getElementById('statsResults');
 
-    resultsDiv.innerHTML = '<p>Loading...</p>';
+  resultsDiv.innerHTML = '<p>Loading...</p>';
 
-    try {
-        const endpoint = statsType === 'popular' ? '/meta/popular' : '/meta/recent';
-        const response = await fetch(endpoint);
-        if (!response.ok) throw new Error('Server error: ' + response.status);
-        const data = await response.json();
-        const items = data?.items || [];
+  try {
+    const endpoint = statsType === 'popular' ? '/meta/popular' : '/meta/recent';
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error('Server error: ' + response.status);
+    const data = await response.json();
+    const items = data?.items || [];
 
-        const html = `
+    const html = `
             <ul>
-                ${items.map(query => `<li>${query}</li>`).join('')}
+                ${items.map((query) => `<li>${query}</li>`).join('')}
             </ul>
         `;
-        resultsDiv.innerHTML = html || '<p>No data available</p>';
-    } catch (e) {
-        resultsDiv.innerHTML = '<p>Error loading statistics</p>';
-        console.error('loadStatistics error:', e);
-    }
+    resultsDiv.innerHTML = html || '<p>No data available</p>';
+  } catch (e) {
+    resultsDiv.innerHTML = '<p>Error loading statistics</p>';
+    console.error('loadStatistics error:', e);
+  }
 }
 
 function search() {
@@ -62,7 +66,9 @@ async function searchByKeyword(keyword = null, resetPage = true) {
   if (resetPage) resetPagination();
   if (!keyword) keyword = document.getElementById('searchInput')?.value?.trim();
   const resultsDiv = document.getElementById('results');
-
+  const safePage = Number.isFinite(currentPage) ? currentPage : 0;
+  const safeLimit = Number.isFinite(limit) ? limit : 10;
+  const offset = safePage * safeLimit;
   if (!resultsDiv) return;
 
   if (!keyword) {
@@ -76,8 +82,9 @@ async function searchByKeyword(keyword = null, resetPage = true) {
   resultsDiv.innerHTML = '<p>Loading...</p>';
 
   try {
-    const offset = currentPage * limit;
-    const response = await fetch(`/films/search/keyword?query=${encodeURIComponent(keyword)}&offset=${offset}&limit=${limit}`);
+    const response = await fetch(
+      `/films/search/keyword?query=${encodeURIComponent(keyword)}&offset=${offset}&limit=${safeLimit}`,
+    );
     if (!response.ok) throw new Error('Server error: ' + response.status);
     const data = await response.json();
     const items = data?.items || [];
@@ -187,7 +194,9 @@ function searchByYearRange(resetPage = true) {
   resultsDiv.innerHTML = '<p>Loading...</p>';
 
   const offset = currentPage * limit;
-  let url = `/films/search/year_range?year_from=${encodeURIComponent(from)}&year_to=${encodeURIComponent(to)}&offset=${offset}&limit=${limit}`;
+  let url = `/films/search/year_range?year_from=${encodeURIComponent(
+    from,
+  )}&year_to=${encodeURIComponent(to)}&offset=${offset}&limit=${limit}`;
   if (genreId) {
     url += `&category_id=${encodeURIComponent(genreId)}`;
   }
