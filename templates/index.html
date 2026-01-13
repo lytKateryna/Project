@@ -11,7 +11,7 @@
         <h4>Search</h4>
         <div class="search-box">
             <input id="searchInput" placeholder="Keyword or year...">
-            <button type="button">Search</button>
+            <button onclick="search()">Search</button>
         </div>
 
         <!-- Year Range -->
@@ -19,7 +19,10 @@
         <div class="year-range-box">
             <input id="yearFrom" type="number" placeholder="From year" min="1900" max="2100">
             <input id="yearTo" type="number" placeholder="To year" min="1900" max="2100">
-            <button type="button">Search by Year Range</button>
+            <select id="yearRangeGenre">
+                <option value="">All Genres</option>
+            </select>
+            <button onclick="searchByYearRange()">Search</button>
         </div>
 
         <!-- Genres -->
@@ -30,6 +33,11 @@
     <!-- ПРАВАЯ ЧАСТЬ -->
     <main class="content">
         <div id="results" class="results"></div>
+        <div id="pagination" class="pagination" style="display: none;">
+            <button id="prevBtn" onclick="prevPage()">Previous</button>
+            <span id="pageInfo">Page 1</span>
+            <button id="nextBtn" onclick="nextPage()">Next</button>
+        </div>
     </main>
 
 </div>
