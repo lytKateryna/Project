@@ -1,7 +1,3 @@
-from fastapi import APIRouter, Request
-from fastapi.responses import Response
-from starlette.responses import FileResponse
-from utils.templates import templates
 from fastapi import APIRouter, Query
 from db.my_mongo import (
     save_search_query,

@@ -5,7 +5,7 @@ from .poster_cache import get as get_cached_poster, set as set_cached_poster
 TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/multi"
 POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
-TMDB_API_KEY = settings.tmdb_api_key
+TMDB_API_KEY = settings.TMDB_API_KEY
 
 
 def get_poster_by_title(title: str) -> str:

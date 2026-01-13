@@ -3,34 +3,61 @@
 {% block title %}Homepage{% endblock %}
 
 {% block body %}
-<div class="layout">
+<!-- Tabs -->
+<div class="tabs">
+    <button class="tab-button active" onclick="showTab('search')">Search</button>
+    <button class="tab-button" onclick="showTab('statistics')">Statistics</button>
+</div>
 
-    <!-- ЛЕВАЯ ПАНЕЛЬ -->
-    <aside class="sidebar">
-        <!-- Search -->
-        <h4>Search</h4>
-        <div class="search-box">
-            <input id="searchInput" placeholder="Keyword or year...">
-            <button onclick="search()">Search</button>
-        </div>
+<!-- Search Tab -->
+<div id="search-tab" class="tab-content active">
+    <div class="layout">
+        <!-- ЛЕВАЯ ПАНЕЛЬ -->
+        <aside class="sidebar">
+            <!-- Search -->
+            <h4>Search</h4>
+            <div class="search-box">
+                <input id="searchInput" placeholder="Keyword or year...">
+                <button onclick="search()">Search</button>
+            </div>
 
-        <!-- Year Range -->
-        <h4>Year Range</h4>
-        <div class="year-range-box">
-            <input id="yearFrom" type="number" placeholder="From year" min="1900" max="2100">
-            <input id="yearTo" type="number" placeholder="To year" min="1900" max="2100">
-            <button onclick="searchByYearRange()">Search by Year Range</button>
-        </div>
+            <!-- Year Range -->
+            <h4>Year Range</h4>
+            <div class="year-range-box">
+                <input id="yearFrom" type="number" placeholder="From year" min="1900" max="2100">
+                <input id="yearTo" type="number" placeholder="To year" min="1900" max="2100">
+                <select id="yearRangeGenre">
+                    <option value="">All Genres</option>
+                </select>
+                <button onclick="searchByYearRange()">Search</button>
+            </div>
 
-        <!-- Genres -->
-        <h4>Genres</h4>
-        <div id="genres" class="genres"></div>
-    </aside>
+            <!-- Genres -->
+            <h4>Genres</h4>
+            <div id="genres" class="genres"></div>
+        </aside>
 
-    <!-- ПРАВАЯ ЧАСТЬ -->
-    <main class="content">
-        <div id="results" class="results"></div>
-    </main>
+        <!-- ПРАВАЯ ЧАСТЬ -->
+        <main class="content">
+            <div id="results" class="results"></div>
+            <div id="pagination" class="pagination" style="display: none;">
+                <button id="prevBtn" onclick="prevPage()">Previous</button>
+                <span id="pageInfo">Page 1</span>
+                <button id="nextBtn" onclick="nextPage()">Next</button>
+            </div>
+        </main>
+    </div>
+</div>
 
+<!-- Statistics Tab -->
+<div id="statistics-tab" class="tab-content">
+    <div class="statistics-container">
+        <h3>Query Statistics</h3>
+        <select id="statsType" onchange="loadStatistics()">
+            <option value="popular">Top 5 Popular Queries</option>
+            <option value="recent">Top 5 Recent Queries</option>
+        </select>
+        <div id="statsResults" class="stats-results"></div>
+    </div>
 </div>
 {% endblock %}

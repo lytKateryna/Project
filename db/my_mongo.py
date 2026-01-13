@@ -2,15 +2,12 @@
 
 from pymongo import MongoClient
 from datetime import datetime
-from dotenv import load_dotenv
-import os
+from settings import settings
 
 # Подключаемся к DB
-load_dotenv()
-MONGODB_URL_EDIT = os.getenv("MONGODB_URL_EDIT")
-db_edit = MongoClient(MONGODB_URL_EDIT)
-COLLECTION_NAME = "final_project_010825-ptm_Kateryna_Lytvynenko"
-db_edit = db_edit["ich_edit"]
+MONGO_DB = MongoClient(settings.MONGO_URL)
+COLLECTION_NAME = settings.MONGO_LOG_COLLECTION
+MONGO_DB = MONGO_DB[settings.MONGO_DB]
 
 
 def save_search_query(query: str):
@@ -19,7 +16,7 @@ def save_search_query(query: str):
         return
     clean_query = query.strip().lower()
     try:
-        db_edit[COLLECTION_NAME].update_one(
+        MONGO_DB[COLLECTION_NAME].update_one(
             {"query": clean_query},
             {
                 "$set": {"last_searched": datetime.now()},
@@ -35,8 +32,8 @@ def get_popular_queries(limit: int = 5):
     """Самые популярные (по количеству запросов через 'count')"""
     try:
         # Сортируем по count
-        cursor = db_edit[COLLECTION_NAME].find().sort("count", -1).limit(limit)
-        return [doc["query"] for doc in cursor]
+        cursor = MONGO_DB[COLLECTION_NAME].find().sort("count", -1).limit(limit)
+        return [doc["query"] for doc in cursor if "query" in doc]
     except Exception as error:
         print(f"Ошибка чтения популярных: {error}")
         return []
@@ -46,8 +43,8 @@ def get_recent_queries(limit: int = 5):
     """Часто ищут / Недавние """
     try:
         # Сортируем по дате
-        cursor = db_edit[COLLECTION_NAME].find().sort("last_searched", -1).limit(limit)
-        return [doc["query"] for doc in cursor]
+        cursor = MONGO_DB[COLLECTION_NAME].find().sort("last_searched", -1).limit(limit)
+        return [doc["query"] for doc in cursor if "query" in doc]
     except Exception as e:
         print(f"Ошибка чтения последних: {e}")
         return []

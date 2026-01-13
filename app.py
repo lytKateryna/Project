@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI #Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 # from starlette.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles

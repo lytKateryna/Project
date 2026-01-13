@@ -1,5 +1,7 @@
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
+print(os.getenv("MONGO_URL"))
 
 
 class Settings(BaseSettings):
@@ -13,12 +15,12 @@ class Settings(BaseSettings):
     MONGO_LOG_COLLECTION: str
     MONGO_LOG_STATS: str = "stats"
 
-    tmdb_api_key: str
-
+    TMDB_API_KEY: str
+    MONGODB_URL_EDIT: str = ""
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
     )
 
 
-settings = Settings()
+settings = Settings()#type:ignore
