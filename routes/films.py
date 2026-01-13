@@ -64,9 +64,11 @@ def search_films_by_keyword_route(query: str, offset: int = Query(0, ge=0), limi
         offset=offset
     )
     result["query"] = query
-    # result["items"] = add_posters(result["items"])  # Commented out to speed up response
-    log_search_keyword(search_type='keyword', params={"query": query})
-    log_films_id([item["film_id"] for item in result["items"]])
+    try:
+        log_search_keyword(search_type='keyword', params={"query": query})
+        log_films_id([item["film_id"] for item in result["items"] if "film_id" in item])
+    except Exception as e:
+        print("Logging failed:", e)
     save_search_query(query)
     return result
 

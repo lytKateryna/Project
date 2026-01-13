@@ -37,17 +37,13 @@ def get_films_count() -> int:
 
 def search_films_by_keyword(keyword:str, limit: int = 10, offset:int = 0)->list[dict]:
     sql = """
-          SELECT film_id, title, release_year, length, rating, '/static/no-poster.png' AS poster_url
-          FROM film
-          WHERE LOWER(title) LIKE CONCAT('%', LOWER(%s), '%')
-          ORDER BY release_year DESC, film_id DESC
-          LIMIT %s OFFSET %s; 
-          """
-    return query_all(
-        sql,
-        (f"%{keyword.lower()}%", limit, offset)
-    )
-
+      SELECT film_id, title, release_year, length, rating, '/static/no-poster.png' AS poster_url
+      FROM film
+      WHERE LOWER(title) LIKE %s
+      ORDER BY release_year DESC, film_id DESC
+      LIMIT %s OFFSET %s;
+    """
+    return query_all(sql, (f"%{keyword.strip().lower()}%", limit, offset))
 def count_films_by_keyword(keyword: str) -> int:
     sql = """
         SELECT COUNT(*) AS total
