@@ -1,9 +1,8 @@
 def paginate(fetch_items, fetch_total, **kwargs):
-    """
-    Generic pagination function.
-    fetch_items: function to fetch items, should accept **kwargs like limit, offset, etc.
-    fetch_total: function to fetch total count, should accept search params but not limit/offset.
-    Returns a dict with items, total, offset, limit, count (which is len(items))
+    """Универсальная функция пагинации
+    fetch_items: функция для получения элементов с параметрами limit, offset и т.д.
+    fetch_total: функция для получения общего количества (без limit/offset)
+    Возвращает словарь с items, total, offset, limit, count
     """
     items = fetch_items(**kwargs)
     # Remove limit and offset for fetch_total as they don't need them

@@ -8,9 +8,10 @@ _collection = None
 _stats = None
 
 def _init_mongo():
+    """Инициализация подключения к MongoDB с отложенной загрузкой"""
     global _client, _collection, _stats
     if _client is not None:
-        return
+       return
     try:
         _client = MongoClient(settings.MONGO_URL, serverSelectionTimeoutMS=500)
         db = _client[settings.MONGO_DB]
@@ -22,6 +23,7 @@ def _init_mongo():
 
 
 def log_search_keyword(search_type: str, params: dict):
+    """Логирует поисковые запросы в MongoDB"""
     _init_mongo()
     if _collection is None:
         return
@@ -34,21 +36,10 @@ def log_search_keyword(search_type: str, params: dict):
     except Exception as e:
         print("Mongo log_search_keyword error:", e)
 
-    # now = datetime.now(timezone.utc).astimezone().isoformat()
-    #
-    #
-    # doc = {
-    #     "timestamp": now,
-    #     "search_type": search_type,
-    #     "params": params
-    # }
-    # try:
-    #     collection.insert_one(doc)
-    # except Exception as e:
-    #     print("MongoDB log_search_keyword error", e)
 
 
 def log_films_id(ids: list[int]) -> None:
+    """Логирует статистику просмотров фильмов"""
     _init_mongo()
     if _stats is None:
         return

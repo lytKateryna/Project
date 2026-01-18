@@ -10,7 +10,7 @@ TMDB_API_KEY = settings.TMDB_API_KEY
 
 def get_poster_by_title(title: str) -> str:
     if not title:
-        return "/static/no-poster.png"
+        return "/static/images/no-poster.svg"
 
     # Check disk cache first
     cached = get_cached_poster(title)
@@ -40,5 +40,5 @@ def get_poster_by_title(title: str) -> str:
         print("TMDB fetch error:", e)
 
     # Cache negative result to avoid repeated failing requests
-    set_cached_poster(title, "/static/no-poster.png")
-    return "/static/no-poster.png"
+    set_cached_poster(title, "/static/images/no-poster.svg")
+    return "/static/images/no-poster.svg"
